@@ -12,3 +12,103 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Product {
+  id        String  @id @default(cuid())
+  name      String  @unique @db.VarChar(100)
+  price     Int
+  imageUrl  String?
+  stock     Int
+  size      String? @db.VarChar(20)
+  slug      String?
+  sku       String? @db.VarChar(20)
+  overview  String? @db.Text
+  materials String? @db.Text
+
+  category   Category?         @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  carts      ProductsOnCarts[]
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  OrderItem OrderItem[]
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String @unique @db.VarChar(100)
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String
+  fullName String  @db.VarChar(100)
+  address  String? @db.Text
+  phone    String? @db.VarChar(14)
+
+  cart  Cart?
+  order Order?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cart {
+  id       String @id @default(cuid())
+  subTotal Int
+
+  user     User              @relation(fields: [userId], references: [id])
+  userId   String            @unique
+  products ProductsOnCarts[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductsOnCarts {
+  quantity Int
+  price    Int
+
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([cartId, productId])
+}
+
+model Order {
+  id         String @id @default(cuid())
+  orderTotal Int
+
+  user       User        @relation(fields: [userId], references: [id])
+  userId     String      @unique
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  quantity Int
+  price    Int
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([orderId, productId])
+}
