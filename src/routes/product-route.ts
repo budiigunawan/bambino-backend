@@ -1,4 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { productService } from "../services";
 
 const apiTags = ["Product"];
 
@@ -17,26 +18,14 @@ productRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
+    const dataListProduct = await productService.getAll();
     return c.json(
       {
         code: 200,
         status: "success",
-        data: {
-          text: "all products",
-        },
+        data: dataListProduct,
       },
       200
     );
-  },
-  (result, c) => {
-    if (!result.success) {
-      return c.json(
-        {
-          code: 400,
-          message: "Error message",
-        },
-        400
-      );
-    }
   }
 );
