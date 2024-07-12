@@ -28,10 +28,10 @@ model Product {
   category   Category?         @relation(fields: [categoryId], references: [id])
   categoryId String?
   carts      ProductsOnCarts[]
+  OrderItem  OrderItem[]
 
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  OrderItem OrderItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
