@@ -40,3 +40,16 @@ export const getAll = async (
     throw e;
   }
 };
+
+export const getById = async (id: string) => {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    return product;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
