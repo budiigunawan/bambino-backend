@@ -54,12 +54,7 @@ export const UpdateProductSchema = z.object({
   name: z.string().min(5).openapi({ example: "T-shirt" }),
   price: z.number().min(1000).openapi({ example: 10000 }),
   stock: z.number().min(0).openapi({ example: 10 }),
-  imageUrl: z
-    .string()
-    .url()
-    .openapi({ example: "https://gudegyudjum.com" })
-    .optional()
-    .or(z.literal("")),
+  imageUrl: z.string().url().openapi({ example: "https://gudegyudjum.com" }),
   size: z
     .string()
     .openapi({ example: "New born" })

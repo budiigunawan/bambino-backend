@@ -4,6 +4,7 @@ import {
   CreateProductSchema,
   ProductIdSchema,
   ProductQueryParameterSchema,
+  UpdateProductSchema,
 } from "../schemas/product-schema";
 
 const apiTags = ["Product"];
@@ -125,6 +126,63 @@ productRoute.openapi(
 
 productRoute.openapi(
   {
+    method: "put",
+    path: "/{id}",
+    request: {
+      params: ProductIdSchema,
+      body: {
+        content: {
+          "application/json": {
+            schema: UpdateProductSchema,
+          },
+        },
+      },
+    },
+    description: "Update product by id.",
+    responses: {
+      201: {
+        description: "Successfully update product.",
+      },
+      404: {
+        description: "Product not found.",
+      },
+    },
+    tags: apiTags,
+  },
+  async (c) => {
+    const id = c.req.param("id")!;
+
+    const targetProduct = await productService.getById(id);
+
+    if (!targetProduct) {
+      return c.json(
+        {
+          code: 404,
+          status: "error",
+          message: "Product not found.",
+        },
+        404
+      );
+    }
+
+    const body: z.infer<typeof UpdateProductSchema> = await c.req.json();
+
+    const updatedProduct = await productService.update(id, body);
+
+    return c.json(
+      {
+        code: 200,
+        status: "success",
+        message: "Product has been updated",
+        updatedProduct,
+      },
+      200
+    );
+  }
+);
+
+productRoute.openapi(
+  {
     method: "delete",
     path: "/{id}",
     request: {
@@ -132,7 +190,7 @@ productRoute.openapi(
     },
     description: "Delete product by ID.",
     responses: {
-      201: {
+      200: {
         description: "Successfully delete product.",
       },
       404: {
@@ -160,10 +218,15 @@ productRoute.openapi(
 
       const deletedProduct = await productService.deleteById(targetProduct.id);
 
-      return c.json({
-        message: `Product with ID ${deletedProduct.id} has been deleted.`,
-        deletedProduct,
-      });
+      return c.json(
+        {
+          code: 200,
+          status: "success",
+          message: `Product with ID ${deletedProduct.id} has been deleted.`,
+          deletedProduct,
+        },
+        200
+      );
     } catch (e) {
       console.error(e);
       throw e;

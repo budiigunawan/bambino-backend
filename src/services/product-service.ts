@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { prisma } from "../lib/db";
-import { CreateProductSchema } from "../schemas/product-schema";
+import {
+  CreateProductSchema,
+  UpdateProductSchema,
+} from "../schemas/product-schema";
 import { slugify } from "../lib/helpers";
 
 export const getAll = async (
@@ -69,6 +72,31 @@ export const create = async (body: z.infer<typeof CreateProductSchema>) => {
         slug,
         price,
         stock,
+        imageUrl,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const update = async (
+  id: string,
+  body: z.infer<typeof UpdateProductSchema>
+) => {
+  try {
+    const { name, price, stock, imageUrl } = body;
+
+    const slug = slugify(name);
+
+    return await prisma.product.update({
+      where: { id },
+      data: {
+        name,
+        price,
+        stock,
+        slug,
         imageUrl,
       },
     });
