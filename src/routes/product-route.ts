@@ -122,3 +122,51 @@ productRoute.openapi(
     );
   }
 );
+
+productRoute.openapi(
+  {
+    method: "delete",
+    path: "/{id}",
+    request: {
+      params: ProductIdSchema,
+    },
+    description: "Delete product by ID.",
+    responses: {
+      201: {
+        description: "Successfully delete product.",
+      },
+      404: {
+        description: "Product not found.",
+      },
+    },
+    tags: apiTags,
+  },
+  async (c) => {
+    try {
+      const id = c.req.param("id")!;
+
+      const targetProduct = await productService.getById(id);
+
+      if (!targetProduct) {
+        return c.json(
+          {
+            code: 404,
+            status: "error",
+            message: "Product not found.",
+          },
+          404
+        );
+      }
+
+      const deletedProduct = await productService.deleteById(targetProduct.id);
+
+      return c.json({
+        message: `Product with ID ${deletedProduct.id} has been deleted.`,
+        deletedProduct,
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+);

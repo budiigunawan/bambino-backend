@@ -73,3 +73,9 @@ export const create = async (body: z.infer<typeof CreateProductSchema>) => {
     throw e;
   }
 };
+
+export const deleteById = async (id: string) => {
+  return await prisma.product.delete({
+    where: { id },
+  });
+};
