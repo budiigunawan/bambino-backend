@@ -91,6 +91,15 @@ productRoute.openapi(
   {
     method: "post",
     path: "/",
+    request: {
+      body: {
+        content: {
+          "application/json": {
+            schema: CreateProductSchema,
+          },
+        },
+      },
+    },
     description: "Create new product",
     responses: {
       201: {
