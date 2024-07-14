@@ -1,6 +1,7 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { productService } from "../services";
 import {
+  CreateProductSchema,
   ProductIdSchema,
   ProductQueryParameterSchema,
 } from "../schemas/product-schema";
@@ -16,10 +17,10 @@ productRoute.openapi(
     request: {
       query: ProductQueryParameterSchema,
     },
-    description: "Get all products",
+    description: "Get all products.",
     responses: {
       200: {
-        description: "Successfully get all products",
+        description: "Successfully get all products.",
       },
     },
     tags: apiTags,
@@ -48,13 +49,13 @@ productRoute.openapi(
     request: {
       params: ProductIdSchema,
     },
-    description: "Get detail product by ID",
+    description: "Get detail product by ID.",
     responses: {
       200: {
-        description: "Successfully get detail product by ID",
+        description: "Successfully get detail product by ID.",
       },
       404: {
-        description: "Product not found",
+        description: "Product not found.",
       },
     },
     tags: apiTags,
@@ -69,7 +70,7 @@ productRoute.openapi(
         {
           code: 404,
           status: "error",
-          message: "Product not found",
+          message: "Product not found.",
         },
         404
       );
@@ -82,6 +83,33 @@ productRoute.openapi(
         data: product,
       },
       200
+    );
+  }
+);
+
+productRoute.openapi(
+  {
+    method: "post",
+    path: "/",
+    description: "Create new product",
+    responses: {
+      201: {
+        description: "Successfully create new product.",
+      },
+    },
+    tags: apiTags,
+  },
+  async (c) => {
+    const body: z.infer<typeof CreateProductSchema> = await c.req.json();
+    const newProduct = await productService.create(body);
+
+    return c.json(
+      {
+        code: 201,
+        status: "success",
+        newProduct,
+      },
+      201
     );
   }
 );

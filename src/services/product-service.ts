@@ -1,4 +1,6 @@
+import { z } from "zod";
 import { prisma } from "../lib/db";
+import { CreateProductSchema } from "../schemas/product-schema";
 
 export const getAll = async (
   page: string = "1",
@@ -48,6 +50,24 @@ export const getById = async (id: string) => {
     });
 
     return product;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const create = async (body: z.infer<typeof CreateProductSchema>) => {
+  try {
+    const { name, price, stock, imageUrl } = body;
+
+    return await prisma.product.create({
+      data: {
+        name,
+        price,
+        stock,
+        imageUrl,
+      },
+    });
   } catch (e) {
     console.error(e);
     throw e;

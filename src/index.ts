@@ -2,6 +2,8 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { productRoute } from "./routes";
 
 const app = new OpenAPIHono();
+const description =
+  "API for Bambino, a simple and user-friendly e-commerce platform built to sell baby clothes.";
 
 app.onError((err, c) => {
   return c.json(
@@ -16,7 +18,9 @@ app.onError((err, c) => {
 
 app.route("/products", productRoute);
 app.get("/", (c) => {
-  return c.text("Hello Hono!");
+  return c.json({
+    description,
+  });
 });
 
 export default app;
