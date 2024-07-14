@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { prisma } from "../lib/db";
 import { CreateProductSchema } from "../schemas/product-schema";
+import { slugify } from "../lib/helpers";
 
 export const getAll = async (
   page: string = "1",
@@ -60,9 +61,12 @@ export const create = async (body: z.infer<typeof CreateProductSchema>) => {
   try {
     const { name, price, stock, imageUrl } = body;
 
+    const slug = slugify(name);
+
     return await prisma.product.create({
       data: {
         name,
+        slug,
         price,
         stock,
         imageUrl,

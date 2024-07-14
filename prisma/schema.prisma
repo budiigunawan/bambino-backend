@@ -15,12 +15,12 @@ datasource db {
 
 model Product {
   id        String  @id @default(cuid())
-  name      String  @unique @db.VarChar(100)
+  name      String  @unique @db.VarChar(150)
+  slug      String  @unique
   price     Int
-  imageUrl  String?
+  imageUrl  String
   stock     Int
   size      String? @db.VarChar(20)
-  slug      String?
   sku       String? @db.VarChar(20)
   overview  String? @db.Text
   materials String? @db.Text
@@ -28,7 +28,7 @@ model Product {
   category   Category?         @relation(fields: [categoryId], references: [id])
   categoryId String?
   carts      ProductsOnCarts[]
-  OrderItem  OrderItem[]
+  orderItems OrderItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
