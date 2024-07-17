@@ -86,7 +86,7 @@ export const update = async (
   body: z.infer<typeof UpdateProductSchema>
 ) => {
   try {
-    const { name, price, stock, imageUrl } = body;
+    const { name, price, stock, imageUrl, overview, materials } = body;
 
     const slug = slugify(name);
 
@@ -98,6 +98,8 @@ export const update = async (
         stock,
         slug,
         imageUrl,
+        overview,
+        materials,
       },
     });
   } catch (e) {
