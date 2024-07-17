@@ -25,6 +25,10 @@ export const ProductIdSchema = z.object({
     .openapi({ example: "clxsclxli0000vs7d0wqe3y8k" }),
 });
 
+export const ProductSlugSchema = z.object({
+  id: z.coerce.string().min(5).openapi({ example: "baby-t-shirt" }),
+});
+
 export const CreateProductSchema = z.object({
   name: z.string().min(5).openapi({ example: "T-shirt" }),
   price: z.number().min(1000).openapi({ example: 10000 }),

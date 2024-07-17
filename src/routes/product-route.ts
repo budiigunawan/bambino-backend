@@ -4,6 +4,7 @@ import {
   CreateProductSchema,
   ProductIdSchema,
   ProductQueryParameterSchema,
+  ProductSlugSchema,
   UpdateProductSchema,
 } from "../schemas/product-schema";
 
@@ -46,14 +47,14 @@ productRoute.openapi(
 productRoute.openapi(
   {
     method: "get",
-    path: "/{id}",
+    path: "/{slug}",
     request: {
-      params: ProductIdSchema,
+      params: ProductSlugSchema,
     },
-    description: "Get detail product by ID.",
+    description: "Get detail product by slug.",
     responses: {
       200: {
-        description: "Successfully get detail product by ID.",
+        description: "Successfully get detail product by slug.",
       },
       404: {
         description: "Product not found.",
@@ -62,9 +63,9 @@ productRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
-    const id = c.req.param("id")!;
+    const slug = c.req.param("slug")!;
 
-    const product = await productService.getById(id);
+    const product = await productService.getBySlug(slug);
 
     if (!product) {
       return c.json(

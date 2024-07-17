@@ -60,6 +60,19 @@ export const getById = async (id: string) => {
   }
 };
 
+export const getBySlug = async (slug: string) => {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { slug },
+    });
+
+    return product;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
 export const create = async (body: z.infer<typeof CreateProductSchema>) => {
   try {
     const { name, price, stock, imageUrl } = body;
