@@ -45,18 +45,29 @@ model Category {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  email    String  @unique
-  password String
-  fullName String  @db.VarChar(100)
-  address  String? @db.Text
-  phone    String? @db.VarChar(14)
+  id       String    @id @default(cuid())
+  email    String    @unique
+  username String    @unique
+  password Password?
+  fullName String    @db.VarChar(100)
+  address  String?   @db.Text
+  phone    String?   @db.VarChar(14)
 
   cart  Cart?
   order Order?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  passwordId String?
+}
+
+model Password {
+  id String @id @default(cuid())
+
+  hash String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Cart {
