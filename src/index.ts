@@ -1,5 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { productRoute } from "./routes";
+import { productRoute, userRoute } from "./routes";
 import { swaggerUI } from "@hono/swagger-ui";
 import { cors } from "hono/cors";
 
@@ -22,6 +22,7 @@ app.onError((err, c) => {
 });
 
 app.route("/products", productRoute);
+app.route("/users", userRoute);
 
 app.doc31("/docs", {
   openapi: "3.0.0",
