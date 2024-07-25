@@ -1,4 +1,5 @@
 import * as productService from "./product-service";
 import * as userService from "./user-service";
+import * as authService from "./auth-service";
 
-export { productService, userService };
+export { productService, userService, authService };

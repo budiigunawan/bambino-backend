@@ -1,5 +1,6 @@
 import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { RegisterSchema } from "../schemas/auth-schema";
+import { authService } from "../services";
 
 const apiTags = ["Auth"];
 
@@ -28,11 +29,11 @@ authRoute.openapi(
   },
   async (c) => {
     const body: z.infer<typeof RegisterSchema> = await c.req.json();
-    console.log(body, "this is body");
+    const newUser = await authService.create(body);
     return c.json({
       code: 201,
       status: "success",
-      newUser: {},
+      newUser: newUser,
     });
   }
 );

@@ -1,8 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { productRoute, userRoute } from "./routes";
+import { productRoute, userRoute, authRoute } from "./routes";
 import { swaggerUI } from "@hono/swagger-ui";
 import { cors } from "hono/cors";
-import { authRoute } from "./routes/auth-route";
 
 const description =
   "API for Bambino, a simple and user-friendly e-commerce platform built to sell baby clothes.";
