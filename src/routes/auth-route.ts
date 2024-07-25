@@ -30,10 +30,14 @@ authRoute.openapi(
   async (c) => {
     const body: z.infer<typeof RegisterSchema> = await c.req.json();
     const newUser = await authService.create(body);
-    return c.json({
-      code: 201,
-      status: "success",
-      newUser: newUser,
-    });
+
+    return c.json(
+      {
+        code: 201,
+        status: "success",
+        newUser,
+      },
+      201
+    );
   }
 );

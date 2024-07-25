@@ -49,16 +49,16 @@ model User {
   email    String    @unique
   username String    @unique
   password Password?
-  fullName String    @db.VarChar(100)
+  fullName String?   @db.VarChar(100)
   address  String?   @db.Text
   phone    String?   @db.VarChar(14)
 
-  cart  Cart?
-  order Order?
-
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  cart       Cart?
+  order      Order?
   passwordId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Password {
