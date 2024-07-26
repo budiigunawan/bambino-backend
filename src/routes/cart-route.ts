@@ -86,7 +86,15 @@ cartRoute.openapi(
       });
     }
 
-    const updatedCart = await cartService.updateItem(existingCart.id, body);
+    const isItemExist = !!existingCart?.products?.find(
+      (product) => product?.productId === body.productId
+    );
+
+    const updatedCart = await cartService.updateItem(
+      existingCart.id,
+      isItemExist,
+      body
+    );
 
     return c.json({
       code: 200,

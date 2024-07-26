@@ -33,27 +33,47 @@ export const create = async (userId: string) => {
 
 export const updateItem = async (
   id: string,
+  isItemExist: boolean,
   body: z.infer<typeof UpdateCartSchema>
 ) => {
   try {
     const { productId, quantity } = body;
 
-    const updatedCart = await prisma.cart.update({
-      where: { id },
-      data: {
-        products: {
-          create: {
-            productId,
-            quantity,
+    if (isItemExist) {
+      return await prisma.cart.update({
+        where: { id },
+        data: {
+          products: {
+            updateMany: {
+              where: {
+                productId,
+              },
+              data: {
+                quantity,
+              },
+            },
           },
         },
-      },
-      include: {
-        products: true,
-      },
-    });
-
-    return updatedCart;
+        include: {
+          products: true,
+        },
+      });
+    } else {
+      return await prisma.cart.update({
+        where: { id },
+        data: {
+          products: {
+            create: {
+              productId,
+              quantity,
+            },
+          },
+        },
+        include: {
+          products: true,
+        },
+      });
+    }
   } catch (e) {
     console.error(e);
     throw e;
