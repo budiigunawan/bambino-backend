@@ -1,4 +1,4 @@
-import { createJWT } from "oslo/jwt";
+import { createJWT, validateJWT } from "oslo/jwt";
 import { TimeSpan } from "oslo";
 
 const getSecret = async () => {
@@ -20,6 +20,18 @@ export const createToken = async (userId: string) => {
     const jwt = await createJWT("HS256", secret, payload, options);
 
     return jwt;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export const validateToken = async (token: string) => {
+  const secret = await getSecret();
+
+  try {
+    const decodedToken = await validateJWT("HS256", secret, token);
+    return decodedToken;
   } catch (err) {
     console.error(err);
     return null;

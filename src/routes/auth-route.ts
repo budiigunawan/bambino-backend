@@ -4,6 +4,7 @@ import { authService } from "../services";
 import { verifyPassword } from "../libs/password";
 import { createToken } from "../libs/jwt";
 import { checkUserToken } from "../middlewares/check-user-token";
+import { prisma } from "../libs/db";
 
 const apiTags = ["Auth"];
 
@@ -149,11 +150,18 @@ authRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
+    // @ts-expect-error: Let's ignore a compile error like this unreachable code
+    const user = c.get("user") as { id: string };
+
+    const userData = await prisma.user.findUnique({
+      where: { id: user.id },
+    });
+
     return c.json(
       {
         code: 200,
         status: "success",
-        user: "you",
+        user: userData,
       },
       200
     );
