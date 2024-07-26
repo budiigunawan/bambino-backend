@@ -1,4 +1,4 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { checkUserToken } from "../middlewares/check-user-token";
 import { cartService } from "../services";
 import { UpdateCartSchema } from "../schemas/cart-schema";
@@ -50,7 +50,7 @@ cartRoute.openapi(
 cartRoute.openapi(
   {
     method: "post",
-    path: "/",
+    path: "/items",
     request: {
       body: {
         content: {
@@ -74,11 +74,24 @@ cartRoute.openapi(
   async (c) => {
     // @ts-expect-error: Let's ignore a compile error like this unreachable code
     const user = c.get("user") as { id: string };
+    const body: z.infer<typeof UpdateCartSchema> = await c.req.json();
+
+    const existingCart = await cartService.get(user.id);
+
+    if (!existingCart) {
+      return c.json({
+        code: 404,
+        status: "success",
+        message: "Cart not found.",
+      });
+    }
+
+    const updatedCart = await cartService.updateItem(existingCart.id, body);
 
     return c.json({
       code: 200,
       status: "success",
-      user,
+      updatedCart,
     });
   }
 );
