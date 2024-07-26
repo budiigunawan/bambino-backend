@@ -3,6 +3,7 @@ import { LoginSchema, RegisterSchema } from "../schemas/auth-schema";
 import { authService } from "../services";
 import { verifyPassword } from "../libs/password";
 import { createToken } from "../libs/jwt";
+import { checkUserToken } from "../middlewares/check-user-token";
 
 const apiTags = ["Auth"];
 
@@ -136,6 +137,7 @@ authRoute.openapi(
     method: "get",
     path: "/me",
     description: "Get current user profile",
+    middleware: [checkUserToken()],
     responses: {
       200: {
         description: "Successfully get current user profile.",
