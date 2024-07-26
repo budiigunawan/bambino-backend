@@ -84,7 +84,6 @@ model Cart {
 
 model ProductsOnCarts {
   quantity Int
-  price    Int
 
   cart      Cart    @relation(fields: [cartId], references: [id])
   cartId    String

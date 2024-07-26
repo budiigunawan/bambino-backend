@@ -24,7 +24,7 @@ app.onError((err, c) => {
 app.route("/products", productRoute);
 app.route("/users", userRoute);
 app.route("/auth", authRoute);
-app.route("/cart", cartRoute);
+app.route("/carts", cartRoute);
 
 app.doc31("/docs", {
   openapi: "3.0.0",
