@@ -1,4 +1,4 @@
-import { prisma } from "../lib/db";
+import { prisma } from "../libs/db";
 
 export const getAll = async (
   page: string = "1",

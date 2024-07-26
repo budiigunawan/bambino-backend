@@ -1,8 +1,8 @@
 import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { LoginSchema, RegisterSchema } from "../schemas/auth-schema";
 import { authService } from "../services";
-import { verifyPassword } from "../lib/password";
-import { createToken } from "../lib/jwt";
+import { verifyPassword } from "../libs/password";
+import { createToken } from "../libs/jwt";
 
 const apiTags = ["Auth"];
 
@@ -127,6 +127,33 @@ authRoute.openapi(
         token,
       },
       201
+    );
+  }
+);
+
+authRoute.openapi(
+  {
+    method: "get",
+    path: "/me",
+    description: "Get current user profile",
+    responses: {
+      200: {
+        description: "Successfully get current user profile.",
+      },
+      404: {
+        description: "User not found.",
+      },
+    },
+    tags: apiTags,
+  },
+  async (c) => {
+    return c.json(
+      {
+        code: 200,
+        status: "success",
+        user: "you",
+      },
+      200
     );
   }
 );

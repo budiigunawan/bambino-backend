@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { prisma } from "../lib/db";
+import { prisma } from "../libs/db";
 import {
   CreateProductSchema,
   UpdateProductSchema,
 } from "../schemas/product-schema";
-import { slugify } from "../lib/helpers";
+import { slugify } from "../libs/helpers";
 
 export const getAll = async (
   page: string = "1",

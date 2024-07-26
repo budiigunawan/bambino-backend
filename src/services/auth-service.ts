@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { LoginSchema, RegisterSchema } from "../schemas/auth-schema";
-import { prisma } from "../lib/db";
-import { hashPassword } from "../lib/password";
+import { prisma } from "../libs/db";
+import { hashPassword } from "../libs/password";
 
 export const create = async (body: z.infer<typeof RegisterSchema>) => {
   try {
