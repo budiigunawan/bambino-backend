@@ -49,7 +49,7 @@ model User {
   email    String    @unique
   username String    @unique
   password Password?
-  fullName String?   @db.VarChar(100)
+  fullName String?   @db.VarChar(50)
   address  String?   @db.Text
   phone    String?   @db.VarChar(14)
 

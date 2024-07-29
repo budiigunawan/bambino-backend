@@ -5,11 +5,12 @@ import { hashPassword } from "../libs/password";
 
 export const create = async (body: z.infer<typeof RegisterSchema>) => {
   try {
-    const { username, email, password } = body;
+    const { username, email, password, fullName } = body;
     return await prisma.user.create({
       data: {
         username,
         email,
+        fullName,
         password: {
           create: {
             hash: await hashPassword(password),
