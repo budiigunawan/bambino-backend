@@ -14,6 +14,26 @@ type CartItem = {
   product: Product;
 };
 
+export const get = async (userId: string) => {
+  try {
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      include: {
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    return orders;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
 export const create = async (
   userId: string,
   cartId: string,

@@ -9,6 +9,33 @@ export const orderRoute = new OpenAPIHono();
 
 orderRoute.openapi(
   {
+    method: "get",
+    path: "/",
+    description: "Get user order",
+    middleware: [checkUserToken()],
+    responses: {
+      200: {
+        description: "Successfully get user's orders",
+      },
+    },
+    tags: apiTags,
+  },
+  async (c) => {
+    // @ts-expect-error: Let's ignore a compile error like this unreachable code
+    const user = c.get("user") as { id: string };
+
+    const orders = await orderService.get(user.id);
+
+    return c.json({
+      code: 200,
+      status: "success",
+      orders,
+    });
+  }
+);
+
+orderRoute.openapi(
+  {
     method: "post",
     path: "/",
     request: {
