@@ -5,10 +5,11 @@ import { verifyPassword } from "../libs/password";
 import { createToken } from "../libs/jwt";
 import { checkUserToken } from "../middlewares/check-user-token";
 import { prisma } from "../libs/db";
+import { Hono } from "../libs/type";
 
 const apiTags = ["Auth"];
 
-export const authRoute = new OpenAPIHono();
+export const authRoute = new OpenAPIHono<Hono>();
 
 authRoute.openapi(
   {
@@ -150,7 +151,6 @@ authRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
-    // @ts-expect-error: Let's ignore a compile error like this unreachable code
     const user = c.get("user") as { id: string };
 
     const userData = await prisma.user.findUnique({

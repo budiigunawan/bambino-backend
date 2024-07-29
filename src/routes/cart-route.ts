@@ -2,10 +2,11 @@ import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { checkUserToken } from "../middlewares/check-user-token";
 import { cartService } from "../services";
 import { UpdateCartSchema } from "../schemas/cart-schema";
+import { Hono } from "../libs/type";
 
 const apiTags = ["Cart"];
 
-export const cartRoute = new OpenAPIHono();
+export const cartRoute = new OpenAPIHono<Hono>();
 
 cartRoute.openapi(
   {
@@ -21,7 +22,6 @@ cartRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
-    // @ts-expect-error: Let's ignore a compile error like this unreachable code
     const user = c.get("user") as { id: string };
 
     const existingCart = await cartService.get(user.id);
@@ -73,7 +73,6 @@ cartRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
-    // @ts-expect-error: Let's ignore a compile error like this unreachable code
     const user = c.get("user") as { id: string };
     const body: z.infer<typeof UpdateCartSchema> = await c.req.json();
 

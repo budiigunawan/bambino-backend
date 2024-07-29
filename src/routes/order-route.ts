@@ -2,10 +2,11 @@ import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { checkUserToken } from "../middlewares/check-user-token";
 import { cartService, orderService } from "../services";
 import { CreateOrderSchema } from "../schemas/order-schema";
+import { Hono } from "../libs/type";
 
 const apiTags = ["Order"];
 
-export const orderRoute = new OpenAPIHono();
+export const orderRoute = new OpenAPIHono<Hono>();
 
 orderRoute.openapi(
   {
@@ -21,7 +22,6 @@ orderRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
-    // @ts-expect-error: Let's ignore a compile error like this unreachable code
     const user = c.get("user") as { id: string };
 
     const orders = await orderService.get(user.id);
@@ -60,7 +60,6 @@ orderRoute.openapi(
     tags: apiTags,
   },
   async (c) => {
-    // @ts-expect-error: Let's ignore a compile error like this unreachable code
     const user = c.get("user") as { id: string };
     const body: z.infer<typeof CreateOrderSchema> = await c.req.json();
 
