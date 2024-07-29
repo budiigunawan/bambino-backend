@@ -70,6 +70,7 @@ cartRoute.openapi(
         description: "Cart not found.",
       },
     },
+    tags: apiTags,
   },
   async (c) => {
     // @ts-expect-error: Let's ignore a compile error like this unreachable code
@@ -79,11 +80,14 @@ cartRoute.openapi(
     const existingCart = await cartService.get(user.id);
 
     if (!existingCart) {
-      return c.json({
-        code: 404,
-        status: "success",
-        message: "Cart not found.",
-      });
+      return c.json(
+        {
+          code: 404,
+          status: "success",
+          message: "Cart not found.",
+        },
+        404
+      );
     }
 
     const isItemExist = !!existingCart?.products?.find(
@@ -96,10 +100,13 @@ cartRoute.openapi(
       body
     );
 
-    return c.json({
-      code: 200,
-      status: "success",
-      updatedCart,
-    });
+    return c.json(
+      {
+        code: 201,
+        status: "success",
+        updatedCart,
+      },
+      201
+    );
   }
 );
